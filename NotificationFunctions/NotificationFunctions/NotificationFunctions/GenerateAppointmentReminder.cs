@@ -14,7 +14,7 @@ namespace NotificationFunctions
         [FunctionName("GenerateAppointmentReminder")]
         public async static void Run(
             [QueueTrigger("generateappointmentreminderqueue", Connection = "queueConnectionString")]string myQueueItem,
-            [Queue("appointmentreminderprocessqueue", Connection = "queueConnectionString")]CloudQueue outputQueue,
+            [Queue("processappointmentreminderqueue", Connection = "queueConnectionString")]CloudQueue outputQueue,
             ILogger log)
         {
             log.LogInformation($"C# Queue trigger function processed:\n{myQueueItem}");
