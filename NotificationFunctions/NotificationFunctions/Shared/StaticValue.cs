@@ -4,6 +4,6 @@ namespace Shared
 {
     public class StaticValue
     {
-        public static int maxInvisibleTimeInMinute = 2;
+        public static int maxInvisibleTimeInMinute = 30;
     }
 }
