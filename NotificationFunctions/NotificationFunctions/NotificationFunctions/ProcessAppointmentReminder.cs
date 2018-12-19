@@ -13,7 +13,7 @@ namespace NotificationFunctions
         [FunctionName("ProcessAppointmentReminder")]
         public async static Task Run(
             [QueueTrigger("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]string myQueueItem,
-            [Queue("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]CloudQueue outputQueue,
+            [Queue("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]CloudQueue sendQueue,
             [Queue("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]CloudQueue reprocessQueue,
             ILogger log)
         {
@@ -30,13 +30,13 @@ namespace NotificationFunctions
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow <= data.NotificationTime)
             {
-                if ((data.NotificationTime - DateTime.UtcNow) < TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
+                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
                     log.LogWarning(     $"\n2:------------------1-output-send-delay------------------" +
                                         $"\n2:------------------invisibleTime: {invisibleTime}------------------");
-                    await outputQueue.CreateIfNotExistsAsync();
-                    await outputQueue.AddMessageAsync(
+                    await sendQueue.CreateIfNotExistsAsync();
+                    await sendQueue.AddMessageAsync(
                         queueMessage,
                         timeToLive: null,
                         initialVisibilityDelay: invisibleTime,
@@ -64,8 +64,8 @@ namespace NotificationFunctions
                 {
                     log.LogWarning( $"\n2:------------------3-output-send-no-delay------------------" +
                                     $"\n2:------------------invisibleTime: null------------------");
-                    await outputQueue.CreateIfNotExistsAsync();
-                    await outputQueue.AddMessageAsync(
+                    await sendQueue.CreateIfNotExistsAsync();
+                    await sendQueue.AddMessageAsync(
                         queueMessage,
                         timeToLive: null,
                         initialVisibilityDelay: null,

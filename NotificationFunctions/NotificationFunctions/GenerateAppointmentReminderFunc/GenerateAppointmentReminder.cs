@@ -29,7 +29,7 @@ namespace GenerateAppointmentReminderFunc
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow <= data.NotificationTime)
             {
-                if ((data.NotificationTime - DateTime.UtcNow) < TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
+                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
                     log.LogInformation( $"\n1:------------------1------------------" +
@@ -41,21 +41,21 @@ namespace GenerateAppointmentReminderFunc
                     log.LogInformation( $"\n1:------------------2------------------" +
                                         $"\n1:------------------invisibleTime: {invisibleTime}------------------");
                 }
-
-                await outputQueue.CreateIfNotExistsAsync();
-                var queueMessage = new CloudQueueMessage(myQueueItem);
-                await outputQueue.AddMessageAsync(
-                    queueMessage,
-                    timeToLive: null,
-                    initialVisibilityDelay: invisibleTime,
-                    options: null,
-                    operationContext: null);
             }
             else
             {
-                log.LogError(   $"\n1:------------------3-discard-------------------" +
+                log.LogError(   $"\n1:------------------3-------------------" +
                                 $"\n1:------------------NotificationTime is in past------------------");
             }
+
+            await outputQueue.CreateIfNotExistsAsync();
+            var queueMessage = new CloudQueueMessage(myQueueItem);
+            await outputQueue.AddMessageAsync(
+                queueMessage,
+                timeToLive: null,
+                initialVisibilityDelay: invisibleTime,
+                options: null,
+                operationContext: null);
         }
     }
 }
