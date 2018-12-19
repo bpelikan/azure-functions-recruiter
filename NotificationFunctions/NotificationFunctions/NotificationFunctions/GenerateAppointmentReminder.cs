@@ -26,7 +26,7 @@ namespace NotificationFunctions
                                 $"\nStartTime:          {data.StartTime.ToLocalTime()}");
 
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
-            if (DateTime.UtcNow < data.NotificationTime)
+            if (DateTime.UtcNow <= data.NotificationTime)
             {
                 if ((data.NotificationTime - DateTime.UtcNow) < TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
                 {
@@ -38,21 +38,22 @@ namespace NotificationFunctions
                     invisibleTime = TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute);
                     log.LogInformation($"\n------------------2------------------");
                 }
+
+                log.LogInformation($"\n------------------invisibleTime: {invisibleTime}------------------");
+                await outputQueue.CreateIfNotExistsAsync();
+                var queueMessage = new CloudQueueMessage(myQueueItem);
+                await outputQueue.AddMessageAsync(
+                    queueMessage,
+                    timeToLive: null,
+                    initialVisibilityDelay: invisibleTime,
+                    options: null,
+                    operationContext: null);
             }
             else
             {
-                log.LogInformation($"\n------------------3------------------");
+                log.LogError($"\n------------------3-discard-------------------");
+                log.LogError($"\n------------------NotificationTime is in past------------------");
             }
-
-            log.LogInformation($"\n------------------invisibleTime: {invisibleTime}------------------");
-            await outputQueue.CreateIfNotExistsAsync();
-            var queueMessage = new CloudQueueMessage(myQueueItem);
-            await outputQueue.AddMessageAsync(
-                queueMessage,
-                timeToLive: null,
-                initialVisibilityDelay: invisibleTime,
-                options: null,
-                operationContext: null);
 
             //dynamic data = JsonConvert.DeserializeObject(myQueueItem);
             //var data = JsonConvert.DeserializeObject<AppointmentReminderMessage>(myQueueItem);

@@ -28,7 +28,7 @@ namespace NotificationFunctions
 
             var queueMessage = new CloudQueueMessage(myQueueItem);
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
-            if (DateTime.UtcNow < data.NotificationTime)
+            if (DateTime.UtcNow <= data.NotificationTime)
             {
                 if ((data.NotificationTime - DateTime.UtcNow) < TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
                 {
@@ -61,8 +61,8 @@ namespace NotificationFunctions
             {
                 if (DateTime.UtcNow < data.StartTime)
                 {
-                    log.LogInformation($"\n------------------3-output-send-no-delay------------------");
-                    log.LogInformation($"\n------------------invisibleTime: null------------------");
+                    log.LogWarning($"\n------------------3-output-send-no-delay------------------");
+                    log.LogWarning($"\n------------------invisibleTime: null------------------");
                     await outputQueue.CreateIfNotExistsAsync();
                     await outputQueue.AddMessageAsync(
                         queueMessage,
@@ -73,7 +73,7 @@ namespace NotificationFunctions
                 }
                 else
                 {
-                    log.LogInformation($"\n------------------4-discard------------------");
+                    log.LogError($"\n------------------4-discard------------------");
                     log.LogError($"\n------------------StartTime is in past------------------");
                 }
             }
