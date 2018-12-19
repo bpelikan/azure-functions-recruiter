@@ -19,11 +19,6 @@ namespace SendAppointmentReminderFunc
             log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
 
             var data = JsonConvert.DeserializeObject<AppointmentReminderMessage>(myQueueItem);
-            //log.LogInformation($"\nEmail:              {data.Email}" +
-            //                    $"\nJobPositionName:    {data.JobPositionName}" +
-            //                    $"\nNowTime:            {DateTime.UtcNow.ToLocalTime()}" +
-            //                    $"\nNotificationTime:   {data.NotificationTime.ToLocalTime()}" +
-            //                    $"\nStartTime:          {data.StartTime.ToLocalTime()}");
 
             log.LogInformation($"Send email to: {data.Email}");
 
