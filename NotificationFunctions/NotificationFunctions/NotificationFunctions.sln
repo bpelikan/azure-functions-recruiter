@@ -5,6 +5,14 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationFunctions", "NotificationFunctions\NotificationFunctions.csproj", "{D0CD21F4-52D1-462D-A43A-41FB9E5A1F31}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateAppointmentReminderFunc", "GenerateAppointmentReminderFunc\GenerateAppointmentReminderFunc.csproj", "{132BF201-DFD4-4230-AA50-ABAD7ACA7507}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{7B3C2DD3-BDF0-4CA1-9D34-0AC286EAEAB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessAppointmentReminderFunc", "ProcessAppointmentReminderFunc\ProcessAppointmentReminderFunc.csproj", "{FEECFFED-3ADF-4608-B056-AAB200BA8E51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendAppointmentReminderFunc", "SendAppointmentReminderFunc\SendAppointmentReminderFunc.csproj", "{EF03F782-F338-45EA-9597-5AAC89CD319F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{D0CD21F4-52D1-462D-A43A-41FB9E5A1F31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0CD21F4-52D1-462D-A43A-41FB9E5A1F31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0CD21F4-52D1-462D-A43A-41FB9E5A1F31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{132BF201-DFD4-4230-AA50-ABAD7ACA7507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{132BF201-DFD4-4230-AA50-ABAD7ACA7507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{132BF201-DFD4-4230-AA50-ABAD7ACA7507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{132BF201-DFD4-4230-AA50-ABAD7ACA7507}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B3C2DD3-BDF0-4CA1-9D34-0AC286EAEAB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B3C2DD3-BDF0-4CA1-9D34-0AC286EAEAB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B3C2DD3-BDF0-4CA1-9D34-0AC286EAEAB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B3C2DD3-BDF0-4CA1-9D34-0AC286EAEAB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEECFFED-3ADF-4608-B056-AAB200BA8E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEECFFED-3ADF-4608-B056-AAB200BA8E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEECFFED-3ADF-4608-B056-AAB200BA8E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEECFFED-3ADF-4608-B056-AAB200BA8E51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF03F782-F338-45EA-9597-5AAC89CD319F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF03F782-F338-45EA-9597-5AAC89CD319F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF03F782-F338-45EA-9597-5AAC89CD319F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF03F782-F338-45EA-9597-5AAC89CD319F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
