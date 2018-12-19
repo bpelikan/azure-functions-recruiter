@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
@@ -9,15 +10,13 @@ namespace NotificationFunctions
 {
     public static class GenerateAppointmentReminder
     {
-        private static int maxInvisibleTime = 5;
-
         [FunctionName("GenerateAppointmentReminder")]
-        public async static void Run(
+        public async static Task Run(
             [QueueTrigger("generateappointmentreminderqueue", Connection = "queueConnectionString")]string myQueueItem,
             [Queue("processappointmentreminderqueue", Connection = "queueConnectionString")]CloudQueue outputQueue,
             ILogger log)
         {
-            log.LogInformation($"C# Queue trigger function processed:\n{myQueueItem}");
+            log.LogInformation($"C# Queue trigger function GenerateAppointmentReminder processed:\n{myQueueItem}");
 
             var data = JsonConvert.DeserializeObject<AppointmentReminderMessage>(myQueueItem);
             log.LogInformation( $"\nEmail:              {data.Email}" +
@@ -29,14 +28,14 @@ namespace NotificationFunctions
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow < data.NotificationTime)
             {
-                if ((data.NotificationTime - DateTime.UtcNow) < TimeSpan.FromMinutes(maxInvisibleTime))
+                if ((data.NotificationTime - DateTime.UtcNow) < TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
                     log.LogInformation($"\n------------------1------------------");
                 }
                 else
                 {
-                    invisibleTime = TimeSpan.FromMinutes(maxInvisibleTime);
+                    invisibleTime = TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute);
                     log.LogInformation($"\n------------------2------------------");
                 }
             }
