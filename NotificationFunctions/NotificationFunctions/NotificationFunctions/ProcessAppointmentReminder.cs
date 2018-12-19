@@ -30,7 +30,7 @@ namespace NotificationFunctions
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow <= data.NotificationTime)
             {
-                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
+                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinutes))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
                     log.LogWarning(     $"\n2:------------------1-output-send-delay------------------" +

@@ -31,7 +31,7 @@ namespace ProcessAppointmentReminderFunc
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow <= data.NotificationTime)
             {
-                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
+                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTimeInDays))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
                     log.LogInformation( $"\n2:------------------1-output-send-delay------------------" +
