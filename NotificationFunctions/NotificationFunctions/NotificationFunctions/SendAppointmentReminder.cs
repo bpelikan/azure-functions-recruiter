@@ -12,8 +12,8 @@ namespace NotificationFunctions
     {
         [FunctionName("SendAppointmentReminder")]
         public static void Run(
-            [QueueTrigger("sendappointmentreminderqueue", Connection = "queueConnectionString")]string myQueueItem,
-            [SendGrid(ApiKey = "SendGridApiKey")] out SendGridMessage email,
+            [QueueTrigger("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]string myQueueItem,
+            //[SendGrid(ApiKey = "SendGridApiKey")] out SendGridMessage email,
             ILogger log)
         {
             log.LogInformation($"C# Queue trigger function processed: {myQueueItem}");
@@ -25,13 +25,14 @@ namespace NotificationFunctions
             //                    $"\nNotificationTime:   {data.NotificationTime.ToLocalTime()}" +
             //                    $"\nStartTime:          {data.StartTime.ToLocalTime()}");
 
-            log.LogInformation($"Send email to: {data.Email}");
+            //log.LogInformation($"Send email to: {data.Email}");
+            log.LogWarning($"\n3:------------------Send email to: {data.Email}------------------");
 
-            email = new SendGridMessage();
-            email.AddTo(data.Email);
-            email.AddContent("text/html", EmailTemplate("Interview appointment reminder", $"Interview appointment reminder: StartTime: {data.StartTime}"));
-            email.SetFrom(new EmailAddress("no-reply@recruiterbp.azurewebsites.net", "Recruiter"));
-            email.SetSubject($"{data.JobPositionName} - Interview appointment reminder");
+            //email = new SendGridMessage();
+            //email.AddTo(data.Email);
+            //email.AddContent("text/html", EmailTemplate("Interview appointment reminder", $"Interview appointment reminder: StartTime: {data.StartTime}"));
+            //email.SetFrom(new EmailAddress("no-reply@recruiterbp.azurewebsites.net", "Recruiter"));
+            //email.SetSubject($"{data.JobPositionName} - Interview appointment reminder");
         }
 
         private static string EmailTemplate(string title, string content)

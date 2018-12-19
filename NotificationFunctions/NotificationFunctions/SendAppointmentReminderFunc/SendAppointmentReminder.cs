@@ -12,7 +12,7 @@ namespace SendAppointmentReminderFunc
     {
         [FunctionName("SendAppointmentReminder")]
         public static void Run(
-            [QueueTrigger("sendappointmentreminderqueue", Connection = "queueConnectionString")]string myQueueItem,
+            [QueueTrigger("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]string myQueueItem,
             [SendGrid(ApiKey = "SendGridApiKey")] out SendGridMessage email,
             ILogger log)
         {
@@ -20,7 +20,8 @@ namespace SendAppointmentReminderFunc
 
             var data = JsonConvert.DeserializeObject<AppointmentReminderMessage>(myQueueItem);
 
-            log.LogInformation($"Send email to: {data.Email}");
+            //log.LogInformation($"Send email to: {data.Email}");
+            log.LogInformation($"\n3:------------------Send email to: {data.Email}------------------");
 
             email = new SendGridMessage();
             email.AddTo(data.Email);

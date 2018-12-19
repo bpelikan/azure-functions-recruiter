@@ -13,9 +13,9 @@ namespace ProcessAppointmentReminderFunc
     {
         [FunctionName("ProcessAppointmentReminder")]
         public async static Task Run(
-            [QueueTrigger("processappointmentreminderqueue", Connection = "queueConnectionString")]string myQueueItem,
-            [Queue("sendappointmentreminderqueue", Connection = "queueConnectionString")]CloudQueue outputQueue,
-            [Queue("generateappointmentreminderqueue", Connection = "queueConnectionString")]CloudQueue reprocessQueue,
+            [QueueTrigger("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]string myQueueItem,
+            [Queue("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]CloudQueue outputQueue,
+            [Queue("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]CloudQueue reprocessQueue,
             ILogger log)
         {
             log.LogInformation($"C# Queue trigger function ProcessAppointmentReminder processed:\n{myQueueItem}");
@@ -34,8 +34,8 @@ namespace ProcessAppointmentReminderFunc
                 if ((data.NotificationTime - DateTime.UtcNow) < TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
-                    log.LogInformation($"\n------------------1-output-send-delay------------------");
-                    log.LogInformation($"\n------------------invisibleTime: {invisibleTime}------------------");
+                    log.LogInformation( $"\n2:------------------1-output-send-delay------------------" +
+                                        $"\n2:------------------invisibleTime: {invisibleTime}------------------");
                     await outputQueue.CreateIfNotExistsAsync();
                     await outputQueue.AddMessageAsync(
                         queueMessage,
@@ -46,14 +46,15 @@ namespace ProcessAppointmentReminderFunc
                 }
                 else
                 {
-                    invisibleTime = TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute);
-                    log.LogInformation($"\n------------------2-reprocess------------------");
-                    log.LogInformation($"\n------------------invisibleTime: {invisibleTime}------------------");
+                    //invisibleTime = TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute);
+                    //log.LogInformation($"\n2:------------------invisibleTime: {invisibleTime}------------------");
+                    log.LogInformation( $"\n2:------------------2-reprocess------------------" +
+                                        $"\n2:------------------invisibleTime: null------------------");
                     await reprocessQueue.CreateIfNotExistsAsync();
                     await reprocessQueue.AddMessageAsync(
                         queueMessage,
                         timeToLive: null,
-                        initialVisibilityDelay: invisibleTime,
+                        initialVisibilityDelay: null,
                         options: null,
                         operationContext: null);
                 }
@@ -62,8 +63,8 @@ namespace ProcessAppointmentReminderFunc
             {
                 if (DateTime.UtcNow < data.StartTime)
                 {
-                    log.LogWarning($"\n------------------3-output-send-no-delay------------------");
-                    log.LogWarning($"\n------------------invisibleTime: null------------------");
+                    log.LogWarning( $"\n2:------------------3-output-send-no-delay------------------" +
+                                    $"\n2:------------------invisibleTime: null------------------");
                     await outputQueue.CreateIfNotExistsAsync();
                     await outputQueue.AddMessageAsync(
                         queueMessage,
@@ -74,8 +75,8 @@ namespace ProcessAppointmentReminderFunc
                 }
                 else
                 {
-                    log.LogError($"\n------------------4-discard------------------");
-                    log.LogError($"\n------------------StartTime is in past------------------");
+                    log.LogError(   $"\n2:------------------4-discard------------------" +
+                                    $"\n2:------------------StartTime is in past------------------");
                 }
             }
         }

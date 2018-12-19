@@ -12,8 +12,8 @@ namespace NotificationFunctions
     {
         [FunctionName("GenerateAppointmentReminder")]
         public async static Task Run(
-            [QueueTrigger("generateappointmentreminderqueue", Connection = "queueConnectionString")]string myQueueItem,
-            [Queue("processappointmentreminderqueue", Connection = "queueConnectionString")]CloudQueue outputQueue,
+            [QueueTrigger("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]string myQueueItem,
+            [Queue("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]CloudQueue outputQueue,
             ILogger log)
         {
             log.LogInformation($"C# Queue trigger function GenerateAppointmentReminder processed:\n{myQueueItem}");
@@ -31,15 +31,16 @@ namespace NotificationFunctions
                 if ((data.NotificationTime - DateTime.UtcNow) < TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
-                    log.LogInformation($"\n------------------1------------------");
+                    log.LogWarning(     $"\n1:------------------1------------------" +
+                                        $"\n1:------------------invisibleTime: {invisibleTime}------------------");
                 }
                 else
                 {
                     invisibleTime = TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute);
-                    log.LogInformation($"\n------------------2------------------");
+                    log.LogWarning(     $"\n1:------------------2------------------" +
+                                        $"\n1:------------------invisibleTime: {invisibleTime}------------------");
                 }
 
-                log.LogInformation($"\n------------------invisibleTime: {invisibleTime}------------------");
                 await outputQueue.CreateIfNotExistsAsync();
                 var queueMessage = new CloudQueueMessage(myQueueItem);
                 await outputQueue.AddMessageAsync(
@@ -51,8 +52,8 @@ namespace NotificationFunctions
             }
             else
             {
-                log.LogError($"\n------------------3-discard-------------------");
-                log.LogError($"\n------------------NotificationTime is in past------------------");
+                log.LogError(   $"\n1:------------------3-discard-------------------" +
+                                $"\n1:------------------NotificationTime is in past------------------");
             }
 
             //dynamic data = JsonConvert.DeserializeObject(myQueueItem);
