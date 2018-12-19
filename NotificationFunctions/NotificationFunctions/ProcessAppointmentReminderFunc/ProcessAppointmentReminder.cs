@@ -78,7 +78,6 @@ namespace ProcessAppointmentReminderFunc
                     log.LogError($"\n------------------StartTime is in past------------------");
                 }
             }
-
         }
     }
 }
