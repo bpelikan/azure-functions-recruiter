@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Net;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
@@ -20,8 +22,7 @@ namespace SendAppointmentReminderFunc
 
             var data = JsonConvert.DeserializeObject<AppointmentReminderMessage>(myQueueItem);
 
-            //log.LogInformation($"Send email to: {data.Email}");
-            log.LogInformation($"\n3:------------------Send email to: {data.Email}------------------");
+            log.LogInformation($"\n4:------------------Send email to: {data.Email}------------------");
 
             email = new SendGridMessage();
             email.AddTo(data.Email);

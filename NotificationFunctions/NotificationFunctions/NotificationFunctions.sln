@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationFunctions", "NotificationFunctions\NotificationFunctions.csproj", "{D0CD21F4-52D1-462D-A43A-41FB9E5A1F31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationFunctions", "NotificationFunctions\NotificationFunctions.csproj", "{D0CD21F4-52D1-462D-A43A-41FB9E5A1F31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateAppointmentReminderFunc", "GenerateAppointmentReminderFunc\GenerateAppointmentReminderFunc.csproj", "{132BF201-DFD4-4230-AA50-ABAD7ACA7507}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateAppointmentReminderFunc", "GenerateAppointmentReminderFunc\GenerateAppointmentReminderFunc.csproj", "{132BF201-DFD4-4230-AA50-ABAD7ACA7507}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessAppointmentReminderFunc", "ProcessAppointmentReminderFunc\ProcessAppointmentReminderFunc.csproj", "{FEECFFED-3ADF-4608-B056-AAB200BA8E51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProcessAppointmentReminderFunc", "ProcessAppointmentReminderFunc\ProcessAppointmentReminderFunc.csproj", "{FEECFFED-3ADF-4608-B056-AAB200BA8E51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendAppointmentReminderFunc", "SendAppointmentReminderFunc\SendAppointmentReminderFunc.csproj", "{EF03F782-F338-45EA-9597-5AAC89CD319F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendAppointmentReminderFunc", "SendAppointmentReminderFunc\SendAppointmentReminderFunc.csproj", "{EF03F782-F338-45EA-9597-5AAC89CD319F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{CB3928D6-E135-4121-AA92-CFB2702AB833}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{CB3928D6-E135-4121-AA92-CFB2702AB833}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckAppointmentStatusFunc", "CheckAppointmentStatusFunc\CheckAppointmentStatusFunc.csproj", "{39DAB808-39B3-4EBA-AA3D-B0D872C0ABED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{CB3928D6-E135-4121-AA92-CFB2702AB833}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB3928D6-E135-4121-AA92-CFB2702AB833}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB3928D6-E135-4121-AA92-CFB2702AB833}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39DAB808-39B3-4EBA-AA3D-B0D872C0ABED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39DAB808-39B3-4EBA-AA3D-B0D872C0ABED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39DAB808-39B3-4EBA-AA3D-B0D872C0ABED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39DAB808-39B3-4EBA-AA3D-B0D872C0ABED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

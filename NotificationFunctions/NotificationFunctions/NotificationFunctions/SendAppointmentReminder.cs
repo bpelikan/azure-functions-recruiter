@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Microsoft.Azure.WebJobs.Extensions.SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Net;
+using System.IO;
 
 namespace NotificationFunctions
 {
@@ -26,8 +28,10 @@ namespace NotificationFunctions
             //                    $"\nStartTime:          {data.StartTime.ToLocalTime()}");
 
             //log.LogInformation($"Send email to: {data.Email}");
-            log.LogWarning($"\n3:------------------Send email to: {data.Email}------------------");
 
+            log.LogWarning($"\n4:------------------Send email to: {data.Email}------------------");
+
+            //email = new SendGridMessage();
             //email = new SendGridMessage();
             //email.AddTo(data.Email);
             //email.AddContent("text/html", EmailTemplate("Interview appointment reminder", $"Interview appointment reminder: StartTime: {data.StartTime}"));

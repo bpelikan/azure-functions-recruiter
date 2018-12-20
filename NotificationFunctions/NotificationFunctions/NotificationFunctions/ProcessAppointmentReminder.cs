@@ -13,7 +13,8 @@ namespace NotificationFunctions
         [FunctionName("ProcessAppointmentReminder")]
         public async static Task Run(
             [QueueTrigger("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]string myQueueItem,
-            [Queue("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]CloudQueue sendQueue,
+            //[Queue("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]CloudQueue sendQueue,
+            [Queue("checkappointmentstatusqueue", Connection = "CheckAppointmentStatusQueueConnectionString")]CloudQueue outputQueue,
             [Queue("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]CloudQueue reprocessQueue,
             ILogger log)
         {
@@ -35,8 +36,8 @@ namespace NotificationFunctions
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
                     log.LogWarning(     $"\n2:------------------1-output-send-delay------------------" +
                                         $"\n2:------------------invisibleTime: {invisibleTime}------------------");
-                    await sendQueue.CreateIfNotExistsAsync();
-                    await sendQueue.AddMessageAsync(
+                    await outputQueue.CreateIfNotExistsAsync();
+                    await outputQueue.AddMessageAsync(
                         queueMessage,
                         timeToLive: null,
                         initialVisibilityDelay: invisibleTime,
@@ -64,8 +65,8 @@ namespace NotificationFunctions
                 {
                     log.LogWarning( $"\n2:------------------3-output-send-no-delay------------------" +
                                     $"\n2:------------------invisibleTime: null------------------");
-                    await sendQueue.CreateIfNotExistsAsync();
-                    await sendQueue.AddMessageAsync(
+                    await outputQueue.CreateIfNotExistsAsync();
+                    await outputQueue.AddMessageAsync(
                         queueMessage,
                         timeToLive: null,
                         initialVisibilityDelay: null,
