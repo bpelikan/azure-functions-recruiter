@@ -29,7 +29,8 @@ namespace GenerateAppointmentReminderFunc
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow <= data.NotificationTime)
             {
-                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTimeInDays))
+                //if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTimeInDays))
+                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromMinutes(StaticValue.maxInvisibleTime))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
                     log.LogInformation( $"\n1:------------------1------------------" +
@@ -37,7 +38,7 @@ namespace GenerateAppointmentReminderFunc
                 }
                 else
                 {
-                    invisibleTime = TimeSpan.FromDays(StaticValue.maxInvisibleTimeInDays);
+                    invisibleTime = TimeSpan.FromMinutes(StaticValue.maxInvisibleTime);
                     log.LogInformation( $"\n1:------------------2------------------" +
                                         $"\n1:------------------invisibleTime: {invisibleTime}------------------");
                 }
