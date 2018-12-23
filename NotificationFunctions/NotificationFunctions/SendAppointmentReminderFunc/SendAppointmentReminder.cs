@@ -26,7 +26,7 @@ namespace SendAppointmentReminderFunc
 
             email = new SendGridMessage();
             email.AddTo(data.Email);
-            email.AddContent("text/html", EmailTemplate("Interview appointment reminder", $"Interview appointment reminder: StartTime: {data.StartTime}"));
+            email.AddContent("text/html", EmailTemplate($"Interview appointment reminder <br/>{data.JobPositionName}", $"Interview appointment reminder: StartTime: {data.StartTime}"));
             email.SetFrom(new EmailAddress("no-reply@recruiterbp.azurewebsites.net", "Recruiter"));
             email.SetSubject($"{data.JobPositionName} - Interview appointment reminder");
         }
