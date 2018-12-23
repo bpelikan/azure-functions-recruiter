@@ -28,7 +28,7 @@ namespace NotificationFunctions
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow <= data.NotificationTime)
             {
-                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromMinutes(StaticValue.maxInvisibleTime))
+                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTime))
                 {
                     invisibleTime = data.NotificationTime - DateTime.UtcNow;
                     log.LogWarning(     $"\n1:------------------1------------------" +
@@ -36,7 +36,7 @@ namespace NotificationFunctions
                 }
                 else
                 {
-                    invisibleTime = TimeSpan.FromMinutes(StaticValue.maxInvisibleTime);
+                    invisibleTime = TimeSpan.FromDays(StaticValue.maxInvisibleTime);
                     log.LogWarning(     $"\n1:------------------2------------------" +
                                         $"\n1:------------------invisibleTime: {invisibleTime}------------------");
                 }

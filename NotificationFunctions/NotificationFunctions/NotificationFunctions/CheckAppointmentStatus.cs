@@ -25,6 +25,7 @@ namespace NotificationFunctions
             var url = GetEnvironmentVariable("recruiterUrl") + "api/InterviewAppointment/" + data.InterviewAppointmentId;
             log.LogInformation($"\n3:------------------url:{url}------------------");
             bool appointmentExist = false;
+            data.JobPositionName += " ST:" + DateTime.UtcNow.ToString();
             try
             {
                 WebRequest request = WebRequest.Create(url);
@@ -48,11 +49,14 @@ namespace NotificationFunctions
                 log.LogError($"Message:{ex.Message}" +
                                 $"\nURL:{url}");
             }
+            data.JobPositionName += " ET:" + DateTime.UtcNow.ToString();
 
+            var message = JsonConvert.SerializeObject(data);
+            log.LogInformation($"\nMessage: \n{message}");
             if (appointmentExist)
             {
                 log.LogWarning($"\n3:------------------1-output-send------------------");
-                var queueMessage = new CloudQueueMessage(myQueueItem);
+                var queueMessage = new CloudQueueMessage(message);
                 await outputQueue.CreateIfNotExistsAsync();
                 await outputQueue.AddMessageAsync(
                     queueMessage,
