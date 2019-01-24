@@ -15,14 +15,16 @@ namespace NotificationFunctions
         [FunctionName("CheckAppointmentStatus")]
         public async static Task Run([QueueTrigger("checkappointmentstatusqueue", Connection = "CheckAppointmentStatusQueueConnectionString")]string checkAppointmentStatusItem, [Queue("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]CloudQueue sendAppointmentReminderQueue, ILogger log)
         {
-            log.LogInformation($"C# Queue trigger function CheckAppointmentStatus processed: \n{checkAppointmentStatusItem}");
+            log.LogInformation($"Function CheckAppointmentStatus processed: \n{checkAppointmentStatusItem}");
 
             var notificationData = JsonConvert.DeserializeObject<AppointmentReminderMessage>(checkAppointmentStatusItem);
-            var url = Environment.GetEnvironmentVariable("recruiterUrl", EnvironmentVariableTarget.Process) + "api/InterviewAppointment/CheckAppointmentStatus/" + notificationData.InterviewAppointmentId;
+            var interviewAppointmentId = notificationData.InterviewAppointmentId;
+            var url = Environment.GetEnvironmentVariable("recruiterUrl", EnvironmentVariableTarget.Process) + "api/InterviewAppointment/CheckAppointmentStatus/";
+
             bool appointmentCheck = false;
             try
             {
-                WebRequest request = WebRequest.Create(url);
+                WebRequest request = WebRequest.Create(url + interviewAppointmentId);
                 WebResponse response = request.GetResponse();
                 appointmentCheck = ((HttpWebResponse)response).StatusCode == HttpStatusCode.OK ? true : false;
                 response.Close();
