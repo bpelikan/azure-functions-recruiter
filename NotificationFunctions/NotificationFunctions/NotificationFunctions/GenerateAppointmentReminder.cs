@@ -11,8 +11,10 @@ namespace NotificationFunctions
     public static class GenerateAppointmentReminder
     {
         [FunctionName("GenerateAppointmentReminder")]
-        public async static Task Run([QueueTrigger("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]string generateAppointmentReminderItem, [Queue("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]CloudQueue processAppointmentReminderQueue)
+        public async static Task Run([QueueTrigger("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]string generateAppointmentReminderItem, [Queue("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]CloudQueue processAppointmentReminderQueue, ILogger log)
         {
+            log.LogInformation($"Function GenerateAppointmentReminder processed:\n{generateAppointmentReminderItem}");
+
             var notificationData = JsonConvert.DeserializeObject<AppointmentReminderMessage>(generateAppointmentReminderItem);
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow <= notificationData.NotificationTime)
