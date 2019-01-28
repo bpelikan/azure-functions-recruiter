@@ -13,8 +13,10 @@ namespace NotificationFunctions
     public static class SendAppointmentReminder
     {
         [FunctionName("SendAppointmentReminder")]
-        public static void Run([QueueTrigger("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]string sendAppointmentReminderItem, [SendGrid]out SendGridMessage notificationEmail)
+        public static void Run([QueueTrigger("sendappointmentreminderqueue", Connection = "SendAppointmentReminderQueueConnectionString")]string sendAppointmentReminderItem, [SendGrid]out SendGridMessage notificationEmail, ILogger log)
         {
+            log.LogInformation($"Function processed: {sendAppointmentReminderItem}");
+
             var notificationData = JsonConvert.DeserializeObject<AppointmentReminderMessage>(sendAppointmentReminderItem);
 
             notificationEmail = new SendGridMessage();
