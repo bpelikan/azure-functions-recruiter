@@ -13,7 +13,7 @@ namespace NotificationFunctions
         [FunctionName("ProcessAppointmentReminder")]
         public async static Task Run([QueueTrigger("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]string processAppointmentReminderItem, [Queue("checkappointmentstatusqueue", Connection = "CheckAppointmentStatusQueueConnectionString")]CloudQueue checkAppointmentStatusQueue,[Queue("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]CloudQueue generateAppointmentReminderQueue,ILogger log)
         {
-            log.LogInformation($"C# Queue trigger function ProcessAppointmentReminder processed:\n{processAppointmentReminderItem}");
+            log.LogInformation($"Function ProcessAppointmentReminder processed:\n{processAppointmentReminderItem}");
 
             await checkAppointmentStatusQueue.CreateIfNotExistsAsync();
             await generateAppointmentReminderQueue.CreateIfNotExistsAsync();
