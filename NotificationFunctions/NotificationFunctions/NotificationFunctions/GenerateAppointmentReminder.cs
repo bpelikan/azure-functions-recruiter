@@ -11,11 +11,14 @@ namespace NotificationFunctions
     public static class GenerateAppointmentReminder
     {
         [FunctionName("GenerateAppointmentReminder")]
-        public async static Task Run([QueueTrigger("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]string generateAppointmentReminderItem, [Queue("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]CloudQueue processAppointmentReminderQueue, ILogger log)
+        public async static Task Run(
+            [QueueTrigger("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]string generateAppointmentReminderQueueItem, 
+            [Queue("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]CloudQueue processAppointmentReminderQueue, 
+            ILogger log)
         {
-            log.LogInformation($"Function GenerateAppointmentReminder processed:\n{generateAppointmentReminderItem}");
+            log.LogInformation($"C# Queue trigger function GenerateAppointmentReminder processed:\n{generateAppointmentReminderQueueItem}");
 
-            var notificationData = JsonConvert.DeserializeObject<AppointmentReminderMessage>(generateAppointmentReminderItem);
+            var notificationData = JsonConvert.DeserializeObject<AppointmentReminderMessage>(generateAppointmentReminderQueueItem);
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
             if (DateTime.UtcNow <= notificationData.NotificationTime)
                 if ((notificationData.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTime))
@@ -24,8 +27,13 @@ namespace NotificationFunctions
                     invisibleTime = TimeSpan.FromDays(StaticValue.maxInvisibleTime);
 
             await processAppointmentReminderQueue.CreateIfNotExistsAsync();
-            var notificationMessage = new CloudQueueMessage(generateAppointmentReminderItem);
-            await processAppointmentReminderQueue.AddMessageAsync(notificationMessage, null, invisibleTime, null, null);
+            var notificationMessage = new CloudQueueMessage(generateAppointmentReminderQueueItem);
+            await processAppointmentReminderQueue.AddMessageAsync(
+                notificationMessage,
+                timeToLive: null,
+                initialVisibilityDelay: invisibleTime,
+                options: null,
+                operationContext: null);
         }
 
         //[FunctionName("GenerateAppointmentReminder")]
