@@ -55,21 +55,3 @@ namespace CheckAppointmentStatusFunc
         }
     }
 }
-
-
-
-//WebRequest request = WebRequest.Create(url + interviewAppointmentId);
-//request.Credentials = CredentialCache.DefaultCredentials;
-//WebResponse response = request.GetResponse();
-
-//var statusCode = ((HttpWebResponse)response).StatusDescription;
-//log.LogInformation($"Status: {statusCode}");
-
-//Stream dataStream = response.GetResponseStream();
-//StreamReader reader = new StreamReader(dataStream);
-//string responseFromServer = reader.ReadToEnd();
-//log.LogInformation($"responseFromServer: {responseFromServer}");
-//appointmentExist = bool.Parse(responseFromServer);
-
-//reader.Close();
-//response.Close();
