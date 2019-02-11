@@ -13,46 +13,24 @@ namespace GenerateAppointmentReminderFunc
     {
         [FunctionName("GenerateAppointmentReminder")]
         public async static Task Run(
-            [QueueTrigger("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]string myQueueItem,
-            [Queue("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]CloudQueue outputQueue,
+            [QueueTrigger("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]string generateAppointmentReminderQueueItem,
+            [Queue("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]CloudQueue processAppointmentReminderQueue,
             ILogger log)
         {
-            log.LogInformation($"C# Queue trigger function GenerateAppointmentReminder processed:\n{myQueueItem}");
+            log.LogInformation($"C# Queue trigger function GenerateAppointmentReminder processed:\n{generateAppointmentReminderQueueItem}");
 
-            var data = JsonConvert.DeserializeObject<AppointmentReminderMessage>(myQueueItem);
-            log.LogInformation($"\nEmail:              {data.Email}" +
-                                $"\nJobPositionName:    {data.JobPositionName}" +
-                                $"\nNowTime:            {DateTime.UtcNow.ToLocalTime()}" +
-                                $"\nNotificationTime:   {data.NotificationTime.ToLocalTime()}" +
-                                $"\nStartTime:          {data.StartTime.ToLocalTime()}");
-
+            var notificationData = JsonConvert.DeserializeObject<AppointmentReminderMessage>(generateAppointmentReminderQueueItem);
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
-            if (DateTime.UtcNow <= data.NotificationTime)
-            {
-                //if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTimeInDays))
-                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTime))
-                {
-                    invisibleTime = data.NotificationTime - DateTime.UtcNow;
-                    log.LogInformation( $"\n1:------------------1------------------" +
-                                        $"\n1:------------------invisibleTime: {invisibleTime}------------------");
-                }
+            if (DateTime.UtcNow <= notificationData.NotificationTime)
+                if ((notificationData.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTime))
+                    invisibleTime = notificationData.NotificationTime - DateTime.UtcNow;
                 else
-                {
                     invisibleTime = TimeSpan.FromDays(StaticValue.maxInvisibleTime);
-                    log.LogInformation( $"\n1:------------------2------------------" +
-                                        $"\n1:------------------invisibleTime: {invisibleTime}------------------");
-                }
-            }
-            else
-            {
-                log.LogError(   $"\n1:------------------3-------------------" +
-                                $"\n1:------------------NotificationTime is in past------------------");
-            }
 
-            await outputQueue.CreateIfNotExistsAsync();
-            var queueMessage = new CloudQueueMessage(myQueueItem);
-            await outputQueue.AddMessageAsync(
-                queueMessage,
+            await processAppointmentReminderQueue.CreateIfNotExistsAsync();
+            var notificationMessage = new CloudQueueMessage(generateAppointmentReminderQueueItem);
+            await processAppointmentReminderQueue.AddMessageAsync(
+                notificationMessage,
                 timeToLive: null,
                 initialVisibilityDelay: invisibleTime,
                 options: null,
