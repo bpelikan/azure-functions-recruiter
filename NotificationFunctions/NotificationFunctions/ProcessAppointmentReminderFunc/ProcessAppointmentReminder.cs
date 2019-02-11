@@ -13,71 +13,36 @@ namespace ProcessAppointmentReminderFunc
     {
         [FunctionName("ProcessAppointmentReminder")]
         public async static Task Run(
-            [QueueTrigger("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]string myQueueItem,
-            [Queue("checkappointmentstatusqueue", Connection = "CheckAppointmentStatusQueueConnectionString")]CloudQueue outputQueue,
-            [Queue("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]CloudQueue reprocessQueue,
+            [QueueTrigger("processappointmentreminderqueue", Connection = "ProcessAppointmentReminderQueuequeueConnectionString")]string processAppointmentReminderItem,
+            [Queue("checkappointmentstatusqueue", Connection = "CheckAppointmentStatusQueueConnectionString")]CloudQueue checkAppointmentStatusQueue,
+            [Queue("generateappointmentreminderqueue", Connection = "GenerateAppointmentReminderQueueConnectionString")]CloudQueue generateAppointmentReminderQueue,
             ILogger log)
         {
-            log.LogInformation($"C# Queue trigger function ProcessAppointmentReminder processed:\n{myQueueItem}");
+            log.LogInformation($"C# Queue trigger function ProcessAppointmentReminder processed:\n{processAppointmentReminderItem}");
 
-            var data = JsonConvert.DeserializeObject<AppointmentReminderMessage>(myQueueItem);
-            log.LogInformation($"\nEmail:              {data.Email}" +
-                                $"\nJobPositionName:    {data.JobPositionName}" +
-                                $"\nNowTime:            {DateTime.UtcNow.ToLocalTime()}" +
-                                $"\nNotificationTime:   {data.NotificationTime.ToLocalTime()}" +
-                                $"\nStartTime:          {data.StartTime.ToLocalTime()}");
+            await checkAppointmentStatusQueue.CreateIfNotExistsAsync();
+            await generateAppointmentReminderQueue.CreateIfNotExistsAsync();
 
-            var queueMessage = new CloudQueueMessage(myQueueItem);
+            var notificationData = JsonConvert.DeserializeObject<AppointmentReminderMessage>(processAppointmentReminderItem);
+            var notificationMessage = new CloudQueueMessage(processAppointmentReminderItem);
             TimeSpan invisibleTime = TimeSpan.FromMinutes(0);
-            if (DateTime.UtcNow <= data.NotificationTime)
+            if (DateTime.UtcNow <= notificationData.NotificationTime)
             {
-                //if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTimeInDays))
-                if ((data.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTime))
+                if ((notificationData.NotificationTime - DateTime.UtcNow) <= TimeSpan.FromDays(StaticValue.maxInvisibleTime))
                 {
-                    invisibleTime = data.NotificationTime - DateTime.UtcNow;
-                    log.LogInformation( $"\n2:------------------1-output-send-delay------------------" +
-                                        $"\n2:------------------invisibleTime: {invisibleTime}------------------");
-                    await outputQueue.CreateIfNotExistsAsync();
-                    await outputQueue.AddMessageAsync(
-                        queueMessage,
-                        timeToLive: null,
-                        initialVisibilityDelay: invisibleTime,
-                        options: null,
-                        operationContext: null);
+                    invisibleTime = notificationData.NotificationTime - DateTime.UtcNow;
+                    await checkAppointmentStatusQueue.AddMessageAsync(notificationMessage, null, invisibleTime, null, null);
                 }
                 else
                 {
-                    //invisibleTime = TimeSpan.FromMinutes(StaticValue.maxInvisibleTimeInMinute);
-                    //log.LogInformation($"\n2:------------------invisibleTime: {invisibleTime}------------------");
-                    log.LogInformation( $"\n2:------------------2-reprocess------------------" +
-                                        $"\n2:------------------invisibleTime: null------------------");
-                    await reprocessQueue.CreateIfNotExistsAsync();
-                    await reprocessQueue.AddMessageAsync(
-                        queueMessage,
-                        timeToLive: null,
-                        initialVisibilityDelay: null,
-                        options: null,
-                        operationContext: null);
+                    await generateAppointmentReminderQueue.AddMessageAsync(notificationMessage);
                 }
             }
             else
             {
-                if (DateTime.UtcNow < data.StartTime)
+                if (DateTime.UtcNow < notificationData.StartTime)
                 {
-                    log.LogWarning( $"\n2:------------------3-output-send-no-delay------------------" +
-                                    $"\n2:------------------invisibleTime: null------------------");
-                    await outputQueue.CreateIfNotExistsAsync();
-                    await outputQueue.AddMessageAsync(
-                        queueMessage,
-                        timeToLive: null,
-                        initialVisibilityDelay: null,
-                        options: null,
-                        operationContext: null);
-                }
-                else
-                {
-                    log.LogError(   $"\n2:------------------4-discard------------------" +
-                                    $"\n2:------------------StartTime is in past------------------");
+                    await checkAppointmentStatusQueue.AddMessageAsync(notificationMessage);
                 }
             }
         }
