@@ -2,6 +2,16 @@
 
 [![Build Status](https://bpelikan.visualstudio.com/Recruiter-app-functions/_apis/build/status/Recruiter-app-functions-CI?branchName=master)](https://bpelikan.visualstudio.com/Recruiter-app-functions/_build/latest?definitionId=13&branchName=master)
 
+
+| branch/project|status|
+|---------------------------------|---|
+| master                          |[![Build Status](https://dev.azure.com/bpelikan/Recruiter-app-functions/_apis/build/status/Recruiter-app-functions-master-CI?branchName=master)](https://dev.azure.com/bpelikan/Recruiter-app-functions/_build/latest?definitionId=13&branchName=master)|
+| CheckAppointmentStatusFunc      |[![Build Status](https://dev.azure.com/bpelikan/Recruiter-app-functions/_apis/build/status/Recruiter-app-functions-CheckAppointmentStatusFunc-CI?branchName=master)](https://dev.azure.com/bpelikan/Recruiter-app-functions/_build/latest?definitionId=12&branchName=master)|
+| GenerateAppointmentReminderFunc |[![Build Status](https://dev.azure.com/bpelikan/Recruiter-app-functions/_apis/build/status/Recruiter-app-functions-GenerateAppointmentReminderFunc-CI?branchName=master)](https://dev.azure.com/bpelikan/Recruiter-app-functions/_build/latest?definitionId=9&branchName=master)|
+| ProcessAppointmentReminderFunc  |[![Build Status](https://dev.azure.com/bpelikan/Recruiter-app-functions/_apis/build/status/Recruiter-app-functions-ProcessAppointmentReminderFunc-CI?branchName=master)](https://dev.azure.com/bpelikan/Recruiter-app-functions/_build/latest?definitionId=8&branchName=master)|
+| SendAppointmentReminderFunc     |[![Build Status](https://dev.azure.com/bpelikan/Recruiter-app-functions/_apis/build/status/Recruiter-app-functions-SendAppointmentReminderFunc-CI?branchName=master)](https://dev.azure.com/bpelikan/Recruiter-app-functions/_build/latest?definitionId=10&branchName=master)|
+
+
 Appointment reminder system that uses Azure Functions, Azure Queues, SendGrid and [Recruiter project](https://github.com/bpelikan/Recruiter "Recruiter project"):
 
 <p align="center">
